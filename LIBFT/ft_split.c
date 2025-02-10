@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 18:54:32 by asajed            #+#    #+#             */
-/*   Updated: 2024/11/02 14:44:01 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/10 13:31:20 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,13 @@ char	**ft_split(char const *s, char c)
 	if (s == NULL)
 		return (NULL);
 	j = countword(s, c);
+	if (!s[0])
+	{
+		strs = (char **)malloc(2 * sizeof(char *));
+		strs[0] = ft_strdup("");
+		strs[1] = NULL;
+		return (strs);
+	}
 	strs = (char **)malloc((j + 1) * sizeof(char *));
 	if (strs == NULL)
 		return (NULL);

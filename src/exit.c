@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:43:02 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/09 18:53:09 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/10 12:04:46 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ void	ft_free(char **strs)
 	strs = NULL;
 }
 
-void	ft_error(char *s, t_data *data, int status)
+void	ft_error(char *s, t_data *data, int status, int exit)
 {
-	ft_putstr_fd("pipex : ", 2);
-	ft_putstr_fd(s, 2);
-	ft_putchar_fd('\n', 2);
-	clean_and_exit(data, status);
+	(void)s;
+	ft_putstr_fd("pipex : ", STDERR_FILENO);
+	ft_putstr_fd(s, STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+	if (exit)
+		clean_and_exit(data, status);
 }
 
 void	clean_and_exit(t_data *data, int status)

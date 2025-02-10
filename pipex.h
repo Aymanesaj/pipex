@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:48:00 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/09 18:54:26 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/10 12:05:33 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 # define PIPEX_H
 
 # include "LIBFT/libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -40,6 +42,6 @@ void		clean_and_exit(t_data *data, int status);
 void		ft_free(char **strs);
 void		ft_parsing(t_data *data, int ac, char **av, char **env);
 void		ft_close(int *fd);
-void		ft_error(char *s, t_data *data, int status);
+void		ft_error(char *s, t_data *data, int status, int exit);
 
 #endif
