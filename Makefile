@@ -1,4 +1,4 @@
-SRC = src/main.c src/exit.c src/parsing.c
+SRC = src/main.c src/exit.c src/parsing.c src/pipex.c
 OBJ = $(SRC:.c=.o)
 CC = cc #-fsanitize=address -g3
 CFLAGS = -Wall -Wextra -Werror

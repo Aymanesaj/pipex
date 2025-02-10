@@ -5,95 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 16:38:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 13:56:56 by asajed           ###   ########.fr       */
+/*   Created: 2025/02/10 16:05:56 by asajed            #+#    #+#             */
+/*   Updated: 2025/02/10 19:46:04 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void	ft_close(int *fd)
+void	get_path(t_pipex *data)
 {
-	if (*fd != -1)
-	{
-		close(*fd);
-		*fd = -1;
-	}
+	int (j);
+	j = 0;
+	while (data->env[j] && ft_strncmp(data->env[j], "PATH", 4))
+		j++;
+	if (!data->env[j])
+		return ;
+	data->path = ft_split(data->env[j] + 5, ':');
+	if (!data->path)
+		ft_error("problem splitting the path", data, 1, 1);
 }
 
-void	child_process(t_data *data, int fd_in, int i, int *pipe_fd)
+void	init_data(t_pipex *data, int ac, char **av, char **env)
 {
-	if (dup2(fd_in, STDIN_FILENO) == -1)
-		ft_error(strerror(errno), data, 1, 1);
-	ft_close(&fd_in);
-	if (i < data->cmd_count - 1)
+	ft_bzero(data, sizeof(t_pipex *));
+	data->env = env;
+	data->av = av;
+	data->cmd_count = ac - 3;
+	data->in_fd = open(av[1], O_RDONLY);
+	if (data->in_fd == -1)
 	{
-		ft_close(&pipe_fd[0]);
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-			ft_error(strerror(errno), data, 1, 1);
-		ft_close(&pipe_fd[1]);
+		data->in_fd = open("/dev/null", O_RDONLY);
+		ft_error("No such file or directory", data, 1, 0);
 	}
-	else
-	{
-		if (dup2(data->out_fd, STDOUT_FILENO) == -1)
-			ft_error(strerror(errno), data, 1, 1);
-	}
-	if (!data->cmd_paths[i] || execve(data->cmd_paths[i], data->cmd_args[i], data->env) == -1)
-	{
-		if (errno == ENOENT)
-			clean_and_exit(data, 127);
-		else if (errno == EACCES)
-			clean_and_exit(data, 126);
-		else
-			clean_and_exit(data, 1);
-	}
-}
-
-void	ft_exec(t_data *data)
-{
-	int	fd_in;
-
-	data->pids = malloc(sizeof(pid_t) * data->cmd_count);
-	if (!data->pids)
-		ft_error(strerror(errno), data, 1, 1);
-	data->var = 0;
-	fd_in = data->in_fd;
-	while (data->var < data->cmd_count)
-	{
-		if (data->var < data->cmd_count - 1 && pipe(data->fd) == -1)
-			ft_error(strerror(errno), data, 1, 1);
-		data->pids[data->var] = fork();
-		if (data->pids[data->var] == -1)
-			ft_error(strerror(errno), data, 1, 1);
-		if (data->pids[data->var] == 0)
-			child_process(data, fd_in, data->var, data->fd);
-		ft_close(&fd_in);
-		if (data->var < data->cmd_count - 1)
-		{
-			ft_close(&data->fd[1]);
-			fd_in = data->fd[0];
-		}
-		data->var++;
-	}
-	data->var = 0;
-	while (data->var < data->cmd_count)
-	{
-		waitpid(data->pids[data->var], &data->status, 0);
-		// if (WIFEXITED(data->status) && WEXITSTATUS(data->status) != 0)
-		// 	ft_error(strerror(errno), data, WEXITSTATUS(data->status), 0);
-		data->status = WEXITSTATUS(data->status);
-		data->var++;
-	}
+	data->out_fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (data->out_fd == -1)
+		ft_error(strerror(errno), data, 1, 0);
+	get_path(data);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_data	data;
+	t_pipex	data;
 
 	if (ac < 5)
 		(ft_putstr_fd("pipex : at least 4 arguments\n", 2), exit(1));
-	ft_bzero(&data, sizeof(t_data));
-	ft_parsing(&data, ac, av, env);
+	ft_bzero(&data, sizeof(t_pipex));
+	init_data(&data, ac, av, env);
 	ft_exec(&data);
-	clean_and_exit(&data, data.status);
+	clean_and_exit(&data, data.status, 1);
 }

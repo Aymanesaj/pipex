@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:48:00 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 12:05:33 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/10 19:45:01 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-typedef struct s_data
+typedef struct s_pipex
 {
 	pid_t	*pids;
 	char	**av;
@@ -32,16 +32,19 @@ typedef struct s_data
 	int		var;
 	int		status;
 	int		out_fd;
-	char	**cmd_paths;
+	char	*cmd_path;
 	char	**path;
-	char	***cmd_args;
 	int		cmd_count;
-}			t_data;
+}			t_pipex;
 
-void		clean_and_exit(t_data *data, int status);
+void		clean_and_exit(t_pipex *data, int status, int exit_s);
 void		ft_free(char **strs);
-void		ft_parsing(t_data *data, int ac, char **av, char **env);
 void		ft_close(int *fd);
-void		ft_error(char *s, t_data *data, int status, int exit);
+void		ft_error(char *s, t_pipex *data, int status, int exit);
+char		*my_access(t_pipex *data, char **args);
+void		child_process(t_pipex *data, int fd_in, int i, int *pipe_fd);
+int			exit_code(int err);
+void		ft_exec(t_pipex *data);
+char		**parse_data(t_pipex *data, int i);
 
 #endif

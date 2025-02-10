@@ -6,11 +6,30 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:43:02 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 12:04:46 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/10 19:45:59 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+
+int	exit_code(int err)
+{
+	if (err == ENOENT)
+		return (127);
+	else if (err == EACCES)
+		return (126);
+	else
+		return (1);
+}
+
+void	ft_close(int *fd)
+{
+	if (*fd != -1)
+	{
+		close(*fd);
+		*fd = -1;
+	}
+}
 
 void	ft_free(char **strs)
 {
@@ -29,35 +48,37 @@ void	ft_free(char **strs)
 	strs = NULL;
 }
 
-void	ft_error(char *s, t_data *data, int status, int exit)
+void	ft_error(char *s, t_pipex *data, int status, int exit)
 {
 	(void)s;
 	ft_putstr_fd("pipex : ", STDERR_FILENO);
 	ft_putstr_fd(s, STDERR_FILENO);
 	ft_putchar_fd('\n', STDERR_FILENO);
 	if (exit)
-		clean_and_exit(data, status);
+		clean_and_exit(data, status, exit);
 }
 
-void	clean_and_exit(t_data *data, int status)
+void	clean_and_exit(t_pipex *data, int status, int exit_s)
 {
-	int (i);
-	i = 0;
 	ft_close(&data->fd[0]);
 	ft_close(&data->fd[1]);
 	ft_close(&data->in_fd);
 	ft_close(&data->out_fd);
-	if (data->pids)
-		free(data->pids);
-	if (data->cmd_args)
+	if (data->cmd_path)
 	{
-		while (data->cmd_args[i])
-			(ft_free(data->cmd_args[i]), i++);
-		free(data->cmd_args);
+		free(data->cmd_path);
+		data->cmd_path = NULL;
 	}
-	if (data->cmd_paths)
-		ft_free(data->cmd_paths);
 	if (data->path)
+	{
 		ft_free(data->path);
-	exit(status);
+		data->path = NULL;
+	}
+	if (data->pids)
+	{
+		free(data->pids);
+		data->pids = NULL;
+	}
+	if (exit_s)
+		exit(status);
 }
