@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:43:02 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 19:45:59 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/11 18:19:57 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	exit_code(int err)
 
 void	ft_close(int *fd)
 {
-	if (*fd != -1)
+	if (*fd != -1 && *fd != 1 && *fd != 2 && *fd != 0)
 	{
 		close(*fd);
 		*fd = -1;
@@ -50,7 +50,6 @@ void	ft_free(char **strs)
 
 void	ft_error(char *s, t_pipex *data, int status, int exit)
 {
-	(void)s;
 	ft_putstr_fd("pipex : ", STDERR_FILENO);
 	ft_putstr_fd(s, STDERR_FILENO);
 	ft_putchar_fd('\n', STDERR_FILENO);

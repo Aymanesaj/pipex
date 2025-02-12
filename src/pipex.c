@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:38:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 19:54:07 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/12 10:08:06 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,29 @@ void	child_process(t_pipex *data, int fd_in, int i, int *pipe_fd)
 	}
 }
 
+void	get_path(t_pipex *data)
+{
+	int (j);
+	j = 0;
+	while (data->env[j] && ft_strncmp(data->env[j], "PATH", 4))
+		j++;
+	if (!data->env[j])
+		return ;
+	data->path = ft_split(data->env[j] + 5, ':');
+	if (!data->path)
+		ft_error("problem splitting the path", data, 1, 1);
+}
+
 void	wait_for_children(t_pipex *data)
 {
 	data->var = 0;
 	while (data->var < data->cmd_count)
 	{
 		waitpid(data->pids[data->var], &data->status, 0);
-		data->status = WEXITSTATUS(data->status);
+		if (WIFEXITED(data->status))
+			data->status = WEXITSTATUS(data->status);
+		else
+			data->status = 1;
 		data->var++;
 	}
 }

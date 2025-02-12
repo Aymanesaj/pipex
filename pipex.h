@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:48:00 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 19:45:01 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/11 16:57:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_H
 
 # include "LIBFT/libft.h"
+# include "src/get_next_line/get_next_line.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -35,6 +36,8 @@ typedef struct s_pipex
 	char	*cmd_path;
 	char	**path;
 	int		cmd_count;
+	int		bonus;
+	int		here_doc;
 }			t_pipex;
 
 void		clean_and_exit(t_pipex *data, int status, int exit_s);
@@ -46,5 +49,9 @@ void		child_process(t_pipex *data, int fd_in, int i, int *pipe_fd);
 int			exit_code(int err);
 void		ft_exec(t_pipex *data);
 char		**parse_data(t_pipex *data, int i);
+void		get_path(t_pipex *data);
+void		init_data(t_pipex *data, int ac, char **av, char **env);
+void		here_doc(t_pipex *data);
+void		wait_for_children(t_pipex *data);
 
 #endif

@@ -6,11 +6,26 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:56:29 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 19:46:08 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/12 09:47:44 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+
+void	init_data(t_pipex *data, int ac, char **av, char **env)
+{
+	ft_bzero(data, sizeof(t_pipex *));
+	data->env = env;
+	data->av = av;
+	data->cmd_count = ac - 3;
+	data->in_fd = open(av[1], O_RDONLY);
+	if (data->in_fd == -1)
+		ft_error(strerror(errno), data, 1, 0);
+	data->out_fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (data->out_fd == -1)
+		ft_error(strerror(errno), data, 1, 1);
+	get_path(data);
+}
 
 char	*my_access(t_pipex *data, char **args)
 {
@@ -48,7 +63,7 @@ char	**parse_data(t_pipex *data, int i)
 	if (!args || !args[0])
 	{
 		if (args)
-			ft_free(args);
+			ft_free(args), ft_error("command not found", data, 126, 1);
 		ft_error(strerror(errno), data, 126, 1);
 	}
 	data->cmd_path = my_access(data, args);
