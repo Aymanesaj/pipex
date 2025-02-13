@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:38:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/12 10:18:35 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/13 08:49:59 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	child_process(t_pipex *data, int fd_in, int i, int *pipe_fd)
 	char	*path;
 	char	**args;
 
+	data->is_child = 1;
 	args = parse_data(data, i);
 	if (dup2(fd_in, STDIN_FILENO) == -1)
 		(ft_free(args), ft_error(strerror(errno), data, 1, 1));

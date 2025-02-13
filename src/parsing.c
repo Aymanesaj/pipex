@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:56:29 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/12 10:18:27 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/13 11:57:38 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*my_access(t_pipex *data, char **args)
 	i = 0;
 	if (!data->path || ft_strchr(args[0], '/'))
 	{
-		if (access(args[0], X_OK) == 0)
+		if (access(args[0], F_OK) == 0)
 			return (ft_strdup(args[0]));
 		else
 			return (NULL);
@@ -46,7 +46,7 @@ char	*my_access(t_pipex *data, char **args)
 		tmp = ft_strjoin("/", args[0]);
 		cmd_path = ft_strjoin(data->path[i], tmp);
 		free(tmp);
-		if (access(cmd_path, X_OK) == -1)
+		if (access(cmd_path, F_OK) == -1)
 			free(cmd_path);
 		else
 			return (cmd_path);
@@ -63,7 +63,7 @@ char	**parse_data(t_pipex *data, int i)
 	if (!args || !args[0])
 	{
 		if (args)
-			ft_free(args), ft_error("command not found", data, 126, 1);
+			(ft_free(args), ft_error("command not found", data, 126, 1));
 		ft_error(strerror(errno), data, 126, 1);
 	}
 	data->cmd_path = my_access(data, args);

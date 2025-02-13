@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:48:00 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/12 10:17:22 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/13 09:38:32 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ typedef struct s_pipex
 	char	*cmd_path;
 	char	**path;
 	int		cmd_count;
-	int		bonus;
-	int		here_doc;
+	int		is_child;
 }			t_pipex;
 
 void		clean_and_exit(t_pipex *data, int status, int exit_s);

@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:59:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/12 10:18:21 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/13 08:36:42 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	here_doc(t_pipex *data)
 	delimiter = ft_strjoin(data->av[2], "\n");
 	ft_close(&data->out_fd);
 	ft_close(&data->in_fd);
-	data->in_fd = 0;
 	data->in_fd = open("./here_doc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (data->in_fd == -1)
 		ft_error(strerror(errno), data, 1, 1);

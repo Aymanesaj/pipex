@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:43:02 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/12 10:18:18 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/13 09:06:51 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,14 @@ void	ft_free(char **strs)
 
 void	ft_error(char *s, t_pipex *data, int status, int exit)
 {
-	ft_putstr_fd("pipex : ", STDERR_FILENO);
-	ft_putstr_fd(s, STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
+	char	*tmp;
+
+	s = ft_strjoin("pipex : ", s);
+	tmp = s;
+	s = ft_strjoin(s, "\n");
+	free(tmp);
+	write(2, s, ft_strlen(s));
+	free(s);
 	if (exit)
 		clean_and_exit(data, status, exit);
 }
@@ -78,6 +83,8 @@ void	clean_and_exit(t_pipex *data, int status, int exit_s)
 		free(data->pids);
 		data->pids = NULL;
 	}
+	if (exit_s && data->is_child)
+		_exit(status);
 	if (exit_s)
 		exit(status);
 }
