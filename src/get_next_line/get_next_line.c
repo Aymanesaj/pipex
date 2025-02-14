@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:43:30 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/11 16:54:24 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/14 23:43:21 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*update(char **buffer, char *gline, int len)
 {
 	char	*temp;
 
-	temp = ft_nstrjoin(gline, substr(*buffer, 0, len));
+	temp = ft_nstrjoin(gline, ft_substr(*buffer, 0, len));
 	if (!temp)
 		return (NULL);
 	ft_memcpy(*buffer, *buffer + len, BUFFER_SIZE - len + 1);

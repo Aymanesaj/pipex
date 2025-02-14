@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:38:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/13 08:49:59 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/14 23:27:07 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,21 @@ void	wait_for_children(t_pipex *data)
 	while (data->var < data->cmd_count)
 	{
 		waitpid(data->pids[data->var], &data->status, 0);
-		if (WIFEXITED(data->status))
+		if (data->nooutfile)
+			data->status = 1;
+		else if (WIFEXITED(data->status))
 			data->status = WEXITSTATUS(data->status);
 		else
 			data->status = 1;
 		data->var++;
 	}
+}
+
+void	call_child(t_pipex *data, int fd_in)
+{
+	if (data->var == 0 && data->nofile)
+		data->var++;
+	child_process(data, fd_in, data->var, data->fd);
 }
 
 void	ft_exec(t_pipex *data)
@@ -85,7 +94,7 @@ void	ft_exec(t_pipex *data)
 		if (data->pids[data->var] == -1)
 			ft_error(strerror(errno), data, 1, 1);
 		if (data->pids[data->var] == 0)
-			child_process(data, fd_in, data->var, data->fd);
+			call_child(data, fd_in);
 		ft_close(&fd_in);
 		if (data->var < data->cmd_count - 1)
 		{

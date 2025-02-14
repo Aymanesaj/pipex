@@ -6,12 +6,11 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 18:54:32 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/10 13:31:20 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/14 23:41:21 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
+#include "../pipex.h"
 
 static int	countword(char const *s, char c)
 {
@@ -33,7 +32,7 @@ static int	countword(char const *s, char c)
 	return (j);
 }
 
-static void	ft_free(char **strs, int j)
+static void	my_free(char **strs, int j)
 {
 	while (j >= 0)
 	{
@@ -61,7 +60,7 @@ static int	ft_ft(char **strs, char const *s, char c, int j)
 			strs[j] = ft_substr(s, start, i - start);
 			if (!strs[j])
 			{
-				ft_free(strs, --j);
+				my_free(strs, --j);
 				return (0);
 			}
 			j++;

@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:55:03 by asajed            #+#    #+#             */
-/*   Updated: 2025/02/11 16:33:18 by asajed           ###   ########.fr       */
+/*   Updated: 2025/02/14 23:42:29 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		ft_checkline(char *gline, int bytes);
 char	*ft_nstrjoin(char *s1, char *s2);
 void	*ft_memset(void *b, int c, size_t len);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-char	*substr(char const *s, unsigned int start, size_t len);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	lenght(char *s, char *till_newline);
 
 #endif
