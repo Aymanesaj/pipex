@@ -83,8 +83,6 @@ void	clean_and_exit(t_pipex *data, int status, int exit_s)
 		free(data->pids);
 		data->pids = NULL;
 	}
-	if (exit_s && data->is_child)
-		_exit(status);
 	if (exit_s)
 		exit(status);
 }
